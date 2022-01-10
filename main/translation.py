@@ -1,8 +1,8 @@
   from modeltranslation.translator import translator, TranslationOptions
 
-from .models import HealthProblem
+from .models import Ad
 
-class HealthTranslationOption(TranslationOptions):
+class AdTranslationOption(TranslationOptions):
     fields = ('title', 'location', 'price', 'description')
 
-translator.register(HealthProblem, HealthTranslationOption)
+translator.register(Ad, AdTranslationOption)

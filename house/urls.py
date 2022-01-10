@@ -21,12 +21,13 @@ from django.conf.urls.static import static
 from drf_yasg import openapi
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
+from rest_framework.routers import DefaultRouter
+from main.views import AdViewSet, ParsingView
 
-from main.views import ParsingView
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Online Сonsultation",
+      title="Hello",
       default_version='v1',
       description="Test description",
       terms_of_service="https://www.google.com/policies/terms/",
@@ -37,12 +38,16 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+router = DefaultRouter()
+router.register('ad', AdViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', schema_view.with_ui()),
     path('v1/api/account/', include('account.urls')),
     path('v1/api/ads/', ParsingView.as_view()),
+    path('v1/api/',  include(router.urls)),
+
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
