@@ -1,6 +1,3 @@
-
- 
-
 from asyncio.tasks import create_task, gather
 import requests
 from bs4 import BeautifulSoup as BS
@@ -10,7 +7,7 @@ import asyncio
 import aiohttp
 
 start_time = time.time()
-books_data = []
+
 
 
 async def get_page_data(session, page):
@@ -25,7 +22,7 @@ async def get_page_data(session, page):
         soup = BS(await responce.text(), 'lxml')
         catalog = soup.find('div', class_='listings-wrapper')
         aparts = catalog.find_all('div', class_='listing')
-      
+        books_data = []
         
         for apart in aparts:
       
@@ -35,7 +32,7 @@ async def get_page_data(session, page):
                 price_dollar = apart.find('div', class_='price').text.strip()
                 price_som = apart.find('div', class_='price-addition').text.strip()
                 description = apart.find('div', class_='description').text.strip()
-                link = apart.find('a').get('href')
+             
         
             except:
                 title = ''
@@ -43,43 +40,36 @@ async def get_page_data(session, page):
                 price_dollar = ''
                 price_som = ''
                 description = ''
-                link = ''
-    url_osh = 'https://www.house.kg/kupit?region=6&town=36&page={page}'
-    async with session.get(url=url_osh, headers=headers) as responce:
-        third = BS(await responce.text(), 'lxml')
-        lists = third.find('div', class_='listings-wrapper')
-        aparts_osh = lists.find_all('div', class_='listing')
-        for apart in aparts_osh:
-            try:
-                title = apart.find('p', class_='title').text.strip()
-                location = apart.find('div', class_='address').text.strip()
-                price_dollar = apart.find('div', class_='price').text.strip()
-                price_som = apart.find('div', class_='price-addition').text.strip()
-                description = apart.find('div', class_='description').text.strip()
-                link = apart.find('a').get('href')
-        
-            except:
-                title = ''
-                location = ''
-                price_dollar = ''
-                price_som = ''
-                description = ''
-                link = ''
+         
+    # url_osh = 'https://www.house.kg/kupit?region=6&town=36&page={page}'
+    # async with session.get(url=url_osh, headers=headers) as responce:
+    #     third = BS(await responce.text(), 'lxml')
+    #     lists = third.find('div', class_='listings-wrapper')
+    #     aparts_osh = lists.find_all('div', class_='listing')
+    #     for apart in aparts_osh:
+    #         try:
+    #             title = apart.find('p', class_='title').text.strip()
+    #             location = apart.find('div', class_='address').text.strip()
+    #             price_dollar = apart.find('div', class_='price').text.strip()
+    #             price_som = apart.find('div', class_='price-addition').text.strip()
+    #             description = apart.find('div', class_='description').text.strip()
+       
+    #         except:
+    #             title = ''
+    #             location = ''
+    #             price_dollar = ''
+    #             price_som = ''
+    #             description = ''
+  
 
-
-            books_data.append({
+            data = {
             'title': title,
             'location': location,
             'price': f'{price_dollar},{price_som}',
             'description': description,
-            'link': f'https://www.house.kg{link}'
-            })
-        return books_data
-          
-
-            
-
-  
+            }
+        books_data.append(data)
+    return books_data
 
     
 
@@ -100,8 +90,6 @@ async def gahter_data():
     for page in range(1, 22):
         task = asyncio.create_task(get_page_data(session, page))
         tasks.append(task)
-        
-        
     await asyncio.gather(*tasks)
     await session.close()
 
@@ -110,5 +98,4 @@ def main():
     asyncio.run(gahter_data())
 
 
-if __name__ == '__main__':
-    main()
+
