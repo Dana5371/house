@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Django = "*"
+Pillow = "*"
+psycopg2-binary = "*"
+python-decouple = "*"
+drf-yasg = "*"
+djangorestframework = "*"
+celery = "*"
+redis = "*"
+requests = "*"
+bs4 = "*"
+lxml = "*"
+html5lib = "*"
+asyncio = "*"
+aiohttp = "*"
+django-modeltranslation = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
