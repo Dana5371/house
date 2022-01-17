@@ -91,7 +91,7 @@ DATABASES = {
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'db',
-        'PORT': 5432
+        'PORT': 5435
     }
 }
 

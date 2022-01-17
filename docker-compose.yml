@@ -1,5 +1,4 @@
-version: "3.7"
-
+version: '3.3'
 
 services:
   db:
@@ -9,19 +8,15 @@ services:
       - POSTGRES_USER=pubg_danaker
       - POSTGRES_PASSWORD=1
     ports:
-      - "5432:5432"
+      - "5435:5435"
   web:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8080
     volumes:
-     - .:/urs/src/house_rest
-    environment:
-      DJANGO_ADMIN_USERNAME: danaker
-      DJANGO_ADMIN_PASSWORD: 1
-      DJANGO_SETTINGS_FOLDER: house
+      - .:/house
+    ports:
+      - "8080:8080"
     depends_on:
       - db
-    env_file:
-      - .env
-
- 
+    links:
+      - db

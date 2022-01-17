@@ -6,7 +6,7 @@ import time
 import asyncio
 import aiohttp
 
-start_time = time.time()
+
 
 
 
@@ -18,6 +18,7 @@ async def get_page_data(session, page):
     }  
     url = f'https://www.house.kg/kupit?page={page}'
     async with session.get(url=url, headers=headers) as responce:
+
     
         soup = BS(await responce.text(), 'lxml')
         catalog = soup.find('div', class_='listings-wrapper')
@@ -32,7 +33,7 @@ async def get_page_data(session, page):
                 price_dollar = apart.find('div', class_='price').text.strip()
                 price_som = apart.find('div', class_='price-addition').text.strip()
                 description = apart.find('div', class_='description').text.strip()
-             
+                link = apart.find('a').get('href')
         
             except:
                 title = ''
@@ -40,7 +41,7 @@ async def get_page_data(session, page):
                 price_dollar = ''
                 price_som = ''
                 description = ''
-         
+                link = ''
     # url_osh = 'https://www.house.kg/kupit?region=6&town=36&page={page}'
     # async with session.get(url=url_osh, headers=headers) as responce:
     #     third = BS(await responce.text(), 'lxml')
@@ -53,24 +54,25 @@ async def get_page_data(session, page):
     #             price_dollar = apart.find('div', class_='price').text.strip()
     #             price_som = apart.find('div', class_='price-addition').text.strip()
     #             description = apart.find('div', class_='description').text.strip()
-       
+    #             link = apart.find('a').get('href')
+        
     #         except:
     #             title = ''
     #             location = ''
     #             price_dollar = ''
     #             price_som = ''
     #             description = ''
-  
+    #             link = ''
 
-            data = {
+
+        books_data.append({
             'title': title,
             'location': location,
             'price': f'{price_dollar},{price_som}',
             'description': description,
-            }
-        books_data.append(data)
+        })
+            
     return books_data
-
     
 
 async def gahter_data():
@@ -80,22 +82,16 @@ async def gahter_data():
     }
 
     url = 'https://www.house.kg/kupit'
-    
     session = aiohttp.ClientSession()
-    
-
     responce = await session.get(url=url, headers=headers)
     soup = BS(await responce.text(), 'lxml')
     tasks = []
     for page in range(1, 22):
         task = asyncio.create_task(get_page_data(session, page))
-        tasks.append(task)
+        tasks.append(task)    
     await asyncio.gather(*tasks)
     await session.close()
 
 
 def main():
-    asyncio.run(gahter_data())
-
-
-
+   asyncio.run(gahter_data())
