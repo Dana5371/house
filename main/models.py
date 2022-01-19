@@ -9,8 +9,11 @@ class Ad(models.Model):
     location = models.CharField(max_length=250)
     price = models.CharField(max_length=250)
     description = models.CharField(max_length=250)
+    image = models.ImageField(upload_to='ad', blank=True)
     
 
     def __str__(self):
         return self.title
+
+    
     
