@@ -29,6 +29,4 @@ class AdSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['author'] = instance.author.email
         return representation
-      
     
-          
